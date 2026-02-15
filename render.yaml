@@ -1,0 +1,25 @@
+# Exemple de configuration Render pour le backend QR Solution
+# Ne pas stocker de secrets dans ce fichier. Créez un secret Render nommé
+# MONGODB_URI via l'interface Render et attachez-le au service.
+services:
+  - type: web
+    name: qr-solution-backend
+    env: node
+    region: oregon
+    branch: main
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromSecret: MONGODB_URI
+
+# Notes:
+# 1) Configurez sur Render un Secret `MONGODB_URI` contenant votre
+#    chaîne de connexion MongoDB (ne la stockez pas dans le repo).
+# 2) Render fournit automatiquement la variable d'environnement `PORT`.
+# 3) Le stockage du dossier `uploads/` est éphémère sur Render. Pour
+#    fichiers persistants, utilisez un stockage externe (S3, DigitalOcean
+#    Spaces, etc.) et adaptez `backend/middleware/upload.js` en conséquence.

@@ -96,9 +96,17 @@ app.use((err, req, res, next) => {
 });
 
 // Connexion MongoDB
+// Vérifier que la variable d'environnement MongoDB est définie
+const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+if (!mongoUri) {
+  console.error('❌ MONGODB_URI non défini. Configurez le secret `MONGODB_URI` sur Render ou ajoutez-le dans .env local.');
+  console.error('Voir backend/render.yaml et backend/RENDER_DEPLOY.md pour les instructions.');
+  process.exit(1);
+}
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(mongoUri);
     console.log('✅ MongoDB connecté avec succès');
   } catch (error) {
     console.error('❌ Erreur de connexion MongoDB:', error.message);
